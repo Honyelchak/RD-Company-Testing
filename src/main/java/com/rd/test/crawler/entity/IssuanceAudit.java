@@ -2,6 +2,7 @@ package com.rd.test.crawler.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -12,6 +13,7 @@ import java.io.Serializable;
  */
 @Data
 @AllArgsConstructor
+@ToString
 public class IssuanceAudit implements Serializable {
     private Long id;
 

@@ -61,6 +61,12 @@ public class SplitAndMergeFile {
         return true;
     }
 
+    /**
+     * 文件分割
+     *
+     * @param copies        指定分割的份数
+     * @param saveDirectory 指定小文件存储的目录i
+     */
     public void split(int copies, String saveDirectory) {
         this.copies = copies;
         this.saveDirectory = saveDirectory;
@@ -91,8 +97,13 @@ public class SplitAndMergeFile {
     }
 
 
-
-
+    /**
+     * 从源文件指定位置，生成小文件
+     *
+     * @param blockIndex      第一个小文件(用于获取小文件路径)
+     * @param beginPointer    读取源文件的指针()
+     * @param actualBlockSize 实际需要生成小文件的大小。
+     */
     private void saveFileFromIndex(int blockIndex, long beginPointer, long actualBlockSize) {
         File dstFile = new File(this.blockPath.get(blockIndex));
 
@@ -103,7 +114,7 @@ public class SplitAndMergeFile {
             randomAccessFile = new RandomAccessFile(this.srcFile, "r");
             bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(dstFile));
             randomAccessFile.seek(beginPointer);
-            byte[] flush = new byte[1024*10];
+            byte[] flush = new byte[1024 * 10];
             int len = 0;
             while ((len = randomAccessFile.read(flush)) != -1) {
                 //写出
@@ -113,7 +124,7 @@ public class SplitAndMergeFile {
                     actualBlockSize -= len;//剩余量
                 } else {
                     //读取每一块实际大小的最后一小部分   最后一次写出
-                    bufferedOutputStream.write(flush, 0, (int)actualBlockSize);
+                    bufferedOutputStream.write(flush, 0, (int) actualBlockSize);
                     break;//每个block最后一部分读取完之后，一定要break，否则就会继续读取
                 }
             }
@@ -133,6 +144,11 @@ public class SplitAndMergeFile {
     }
 
 
+    /**
+     * 合并文件
+     *
+     * @param destPath 指定合并后文件的存储位置
+     */
     public void merge(String destPath) {
         File destFile = new File(destPath);
         SequenceInputStream sequenceInputStream = null;
@@ -175,25 +191,36 @@ public class SplitAndMergeFile {
 
 
     public static void main(String[] args) {
+        // 源文件路径
         String srcfile = "D:\\Users\\Desktop\\test\\logstash-5.6.8.zip.part1";
+        // 合并后的文件路径
         String fileAfterMergePath = "D:\\Users\\Desktop\\test\\11.txt";
+
         /*try {
+            // 生成一个100M大小的文件
             FilesUtil.create(new File(srcfile), 100*1024*1024);
             System.out.println("100M文件create成功！");
         } catch (IOException e) {
             e.printStackTrace();
         }*/
+        // 创建SplitAndMergeFile文件实例
         SplitAndMergeFile splitFile = new SplitAndMergeFile(new File(srcfile), "zip");
+        // 分割文件
         splitFile.split(20, null);
-        List<String> blockPath = splitFile.blockPath;
+        // 合并文件
         splitFile.merge(fileAfterMergePath);
+        // 合并后的文件
         File file1 = new File(fileAfterMergePath);
+        // 源文件
         File file2 = new File(srcfile);
+        // 合并后的文件生成的SHA1字符串
         String fileSha1 = FilesUtil.getFileSha1(file1);
+        // 源文件生成的SHA1字符串
         String fileSha2 = FilesUtil.getFileSha1(file2);
 
         System.out.println("拆分前文件SHA1:" + fileSha1);
         System.out.println("拆分后文件SHA1:" + fileSha2);
+        // 对比是否一致。
         if (fileSha1.equals(fileSha2)) {
             System.out.println("SHA1一致");
         } else {

@@ -14,6 +14,12 @@ import java.security.NoSuchAlgorithmException;
  */
 public class FilesUtil {
 
+    /**
+     * 生成文件的SHA1
+     *
+     * @param file 需要计算的File
+     * @return
+     */
     public static String getFileSha1(File file) {
         FileInputStream in = null;
         try {
@@ -50,12 +56,19 @@ public class FilesUtil {
     }
 
 
-    public static void create(File file, long length) throws IOException{
+    /**
+     * 创建一个指定大小的文件
+     *
+     * @param file   File对象(指定路径)
+     * @param length 文件大小
+     * @throws IOException
+     */
+    public static void createFileOfSpecifiedSize(File file, long length) throws IOException {
         RandomAccessFile r = null;
         try {
             r = new RandomAccessFile(file, "rw");
             r.setLength(length);
-        } finally{
+        } finally {
             if (r != null) {
                 try {
                     r.close();

@@ -3,6 +3,7 @@ package com.rd.test.crawler.mapper;
 import com.rd.test.crawler.entity.OpenDirectory;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 
 /**
  * @author Honyelchak
@@ -11,7 +12,8 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface OpenDirectoryMapper {
 
-    @Insert("INSERT INTO `open_directory` (`index`, `category`, `issuing_agency`, `meeting_name`, `symbol`, `keywords`, `publication_date`) VALUES (#{index}, #{category}, #{issuing_agency},#{meeting_name}, #{symbol}, #{keywords}, #{publication_date})")
+    @Insert("INSERT INTO `open_directory` (`index`, `category`, `issuing_agency`, `meeting_name`, `symbol`, `keywords`, `publication_date`) VALUES (#{index}, #{category}, #{issuingAgency},#{meetingName}, #{symbol}, #{keywords}, #{publicationDate})")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     public int insert(OpenDirectory openDirectory);
 
 }

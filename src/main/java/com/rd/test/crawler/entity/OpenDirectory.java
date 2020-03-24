@@ -2,6 +2,7 @@ package com.rd.test.crawler.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,6 +15,7 @@ import java.util.List;
  */
 @Data
 @AllArgsConstructor
+@ToString
 public class OpenDirectory implements Serializable {
     private Long id;
     private String meetingName;
